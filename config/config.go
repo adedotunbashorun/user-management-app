@@ -20,14 +20,14 @@ func LoadEnv() {
 
 func ConnectDB() *mongo.Client {
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URI"))
-	client, err := mongo.NewClient(clientOptions)
+	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	err = client.Connect(ctx)
+	_, err = mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
