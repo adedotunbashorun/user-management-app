@@ -1,5 +1,5 @@
 ## Description
-git clone https://github.com/yourusername/user-management-app.git
+git clone https://github.com/adedotunbashorun/user-management-app.git
 cd user-management-app
 
 ## Installation
