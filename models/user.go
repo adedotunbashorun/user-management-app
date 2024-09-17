@@ -9,3 +9,10 @@ type User struct {
 	Email    string             `bson:"email,omitempty"`
 	Password string             `bson:"password,omitempty"`
 }
+
+type UserResponse struct {
+	ID       primitive.ObjectID `json:"id"`
+	Username string             `json:"username"`
+	Name     string             `json:"name"`
+	Email    string             `json:"email"`
+}

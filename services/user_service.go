@@ -35,20 +35,22 @@ func (us *UserService) Login(email, password string) (models.User, error) {
 	return user, nil
 }
 
-func (us *UserService) GetUserFromDB(id string) (models.User, error) {
+func (us *UserService) GetUserFromDB(id string) (models.UserResponse, error) {
 	user, err := us.UserRepo.GetUserByID(id)
 	if err != nil {
-		return models.User{}, errors.New(userNotFoundErr)
+		return models.UserResponse{}, errors.New(userNotFoundErr)
 	}
 
-	return user, nil
+	userResponse := models.UserResponse{
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Name:     user.Name,
+	}
+
+	return userResponse, nil
 }
 
 func (us *UserService) UpdateUserInDB(id string, updateData bson.M) (models.User, error) {
-	_, err := us.UserRepo.GetUserByKey("_id", id)
-	if err == nil {
-		return models.User{}, errors.New(userNotFoundErr)
-	}
-
 	return us.UserRepo.UpdateUserByID(id, updateData)
 }
