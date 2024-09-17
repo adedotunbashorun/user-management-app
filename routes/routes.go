@@ -2,6 +2,7 @@ package routes
 
 import (
 	"user-management-app/controllers"
+	"user-management-app/middleware" // Add this line to import the middleware package
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,13 @@ func SetupRoutes(router *gin.Engine, userController *controllers.UserController)
 	{
 		api.POST("/register", userController.Register)
 		api.POST("/login", userController.Login)
-		// api.GET("/users", userController.GetUsers)
+	}
+
+	// Authenticated routes
+	auth := api.Group("/user")
+	auth.Use(middleware.JWTAuthMiddleware())
+	{
+		auth.GET("/:id", userController.GetUser)
+		auth.PUT("/:id", userController.UpdateUser)
 	}
 }

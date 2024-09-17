@@ -7,6 +7,7 @@ import (
 	"user-management-app/utils"
 
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type UserController struct {
@@ -56,4 +57,42 @@ func (uc *UserController) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func (uc *UserController) GetUser(c *gin.Context) {
+	userId := c.Param("id")
+
+	user, err := uc.UserService.GetUserFromDB(userId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found " + userId})
+		return
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+func (uc *UserController) UpdateUser(c *gin.Context) {
+	userId := c.Param("id")
+
+	var updatedUserData struct {
+		Username string `json:"username"`
+		Name     string `json:"name"`
+	}
+
+	if err := c.ShouldBindJSON(&updatedUserData); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	user := bson.M{
+		"username": updatedUserData.Username,
+		"name":     updatedUserData.Name,
+	}
+
+	if _, err := uc.UserService.UpdateUserInDB(userId, user); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
