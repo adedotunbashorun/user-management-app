@@ -7,6 +7,11 @@ import (
 )
 
 func SetupRoutes(router *gin.Engine, userController *controllers.UserController) {
-	router.POST("/register", userController.Register)
-	router.POST("/login", userController.Login)
+	// Create a route group with the base path /api/v1
+	api := router.Group("/api/v1")
+	{
+		api.POST("/register", userController.Register)
+		api.POST("/login", userController.Login)
+		// api.GET("/users", userController.GetUsers)
+	}
 }
