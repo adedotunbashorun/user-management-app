@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(router *gin.Engine, userController *controllers.UserController) {
+func SetupUsersRoutes(router *gin.Engine, userController *controllers.UserController) {
 	// Create a route group with the base path /api/v1
 	api := router.Group("/api/v1")
 	{

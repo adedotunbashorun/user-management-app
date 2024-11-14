@@ -21,7 +21,7 @@ func main() {
 	userController := controllers.UserController{UserService: &userService}
 
 	router := gin.Default()
-	routes.SetupRoutes(router, &userController)
+	routes.SetupUsersRoutes(router, &userController)
 
 	router.Run(":8080")
 }
